@@ -7,6 +7,8 @@
 clear
 close all
 
+plotFigs = 0;
+
 % data read
 data = csvread('roll_data_test.csv');
 phi = data(:,1);
@@ -43,10 +45,6 @@ for k = 2:length(p)
     [x(:,k),P] = EKF_Generic(f,h,J,R,Q,z(:,k-1),x(:,k-1),da(k-1),P,Ts);
 end
 
-
-
-
-
 RMSE = mean((p-x(2,:)').^2);
 
 estLp = x(3,end);
@@ -54,20 +52,23 @@ estLda = x(4,end);
 
 fprintf('RMSE: %.4f (rad/s)\n',RMSE)
 fprintf('Lp: %.2f    Lda: %.2f\n',estLp,estLda)
-figure('Name','Roll Rate')
-title('Roll Rate')
-plot(t,x(2,:),t,p)
-legend('Estimate','Measured')
 
-figure('Name','Role Angle')
-title('Roll Angle')
-plot(t,x(1,:),t,phi)
-legend('Estimate','Measured')
-
-figure('Name','Parameters')
-title('Parameters')
-plot(t,x(3,:),t,x(4,:))
-legend('Lp','Lda')
+if plotFigs
+    figure('Name','Roll Rate')
+    title('Roll Rate')
+    plot(t,x(2,:),t,p)
+    legend('Estimate','Measured')
+    
+    figure('Name','Role Angle')
+    title('Roll Angle')
+    plot(t,x(1,:),t,phi)
+    legend('Estimate','Measured')
+    
+    figure('Name','Parameters')
+    title('Parameters')
+    plot(t,x(3,:),t,x(4,:))
+    legend('Lp','Lda')
+end
 
 % Comparison
 load('params')

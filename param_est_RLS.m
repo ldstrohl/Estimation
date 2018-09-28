@@ -6,6 +6,7 @@
 
 clear
 close all
+plotFigs = 0;
 
 % data read
 data = csvread('roll_data_test.csv');
@@ -63,22 +64,25 @@ RMSE = mean((p-x(1,:)').^2);
 
 fprintf('RMSE: %.4f (rad/s)\n',RMSE)
 fprintf('Lp: %.2f    Lda: %.2f\n',thetaEst(1),thetaEst(2))
-figure('Name','Roll Rate')
-title('Roll Rate')
-plot(t,x(1,:),t,p)
-legend('Estimate','Measured')
 
-
-figure('Name','Role Angle')
-title('Roll Angle')
-plot(t,x(2,:),t,phi)
-legend('Estimate','Measured')
-
-figure('Name','Parameters')
-title('Parameters')
-plot(t,Lpk,t,Ldak)
-legend('Lp','Lk')
-xlabel('t (s)')
+if plotFigs
+    figure('Name','Roll Rate')
+    title('Roll Rate')
+    plot(t,x(1,:),t,p)
+    legend('Estimate','Measured')
+    
+    
+    figure('Name','Role Angle')
+    title('Roll Angle')
+    plot(t,x(2,:),t,phi)
+    legend('Estimate','Measured')
+    
+    figure('Name','Parameters')
+    title('Parameters')
+    plot(t,Lpk,t,Ldak)
+    legend('Lp','Lk')
+    xlabel('t (s)')
+end
 
 % Comparison
 load params;
