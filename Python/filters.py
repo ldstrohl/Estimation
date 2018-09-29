@@ -1,5 +1,6 @@
-def KF(A, B, H, Q, R, u, z, xprev, Pprev):
-    xdim = size(A, 1);
+def KF(A, B, H, Q, R, u, z, prevState):
+    
+	xdim = size(A, 1);
     % zdim = size(H, 2);
     if nargin < 8
         x0 = zeros(xdim, 1);
