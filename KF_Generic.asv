@@ -19,6 +19,7 @@ Ppred = A*P*A' + Q;
 ytilde = z - H*xpred;
 S = H*Ppred*H'+R;
 K = Ppred*H'/S;
+disp(S)
 x = xpred + K*ytilde;
 P = (eye(2)-K*H)*Ppred;
 

@@ -1,26 +1,31 @@
-def KF(A, B, H, Q, R, u, z, prevState):
-    
-	xdim = size(A, 1);
-    % zdim = size(H, 2);
-    if nargin < 8
-        x0 = zeros(xdim, 1);
-        P = eye(xdim);
-    elseif
-    nargin < 9
-    x0 = zeros(xdim, 1);
+# module containing estimation filters
 
+import numpy as np
+import state
 
-	end
+class KalmanFilter:
+    def __init__(self, r, q):
+        self.r = r
+        self.q = q
 
-	% filter
-	xpred = A * x0 + B * u;
-	Ppred = A * P * A
-	' + Q;
-	ytilde = z - H * xpred;
-	S = H * Ppred * H
-	'+R;
-	K = Ppred * H
-	'/S;
-	x = xpred + K * ytilde;
-	P = (eye(2) - K * H) * P;
+    def update(self, previous_state, dynamic_model):
+        x0 = previous_state.x
+        P0 = previous_state.P
 
+        A = dynamic_model.A
+        B = dynamic_model.B
+        H = dynamic_model.H
+
+        u = previous_state.u
+        z = previous_state.z
+
+        # filter
+        x_pred = A @ x0 + B @ u
+        P_pred = A @ P0 @ A.T + self.q
+        meas_error = z - H @ x_pred
+        S = H @ P_pred @ H.T+self.r
+        K = np.linalg.solve(S.T, (P_pred @ H.T).T).T
+        x = x_pred + K * meas_error
+        P = (np.identity(2) - K * H) * P_pred
+
+        return State(x, P)

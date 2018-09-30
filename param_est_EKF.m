@@ -7,7 +7,7 @@
 clear
 close all
 
-plotFigs = 0;
+plotFigs = 1;
 
 % data read
 data = csvread('roll_data_test.csv');
@@ -16,10 +16,6 @@ p = data(:,2);
 da = data(:,3);
 Ts = .01; % sample time (100 Hz)
 t = [Ts:Ts:length(p)*Ts];
-
-figure('Name','Data')
-plot(t,phi,t,p,t,da)
-legend('Angle','Rate','Aileron Deflection')
 
 %% Kalman Filter
 
@@ -54,6 +50,10 @@ fprintf('RMSE: %.4f (rad/s)\n',RMSE)
 fprintf('Lp: %.2f    Lda: %.2f\n',estLp,estLda)
 
 if plotFigs
+    figure('Name','Data')
+    plot(t,phi,t,p,t,da)
+    legend('Angle','Rate','Aileron Deflection')
+    
     figure('Name','Roll Rate')
     title('Roll Rate')
     plot(t,x(2,:),t,p)
