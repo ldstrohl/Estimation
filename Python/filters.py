@@ -1,7 +1,8 @@
 # module containing estimation filters
 
 import numpy as np
-import state
+from state import State
+
 
 class KalmanFilter:
     def __init__(self, r, q):

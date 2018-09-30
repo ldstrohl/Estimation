@@ -8,6 +8,7 @@ from state import State
 from dynamics import LinearDynamics
 from filters import KalmanFilter
 
+
 class Inputs:
     def __init__(self, u, z):
         self.u = u
@@ -44,8 +45,9 @@ dynamic_model = LinearDynamics(A, B, H)
 kalman_filter = KalmanFilter(R, Q)
 inputs = Inputs(u, z)
 
-next_state = filters.kalman_filter(previous_state, dynamic_model,
-                                   filter_params, inputs)
+next_state = kalman_filter.update(previous_state, dynamic_model)
 
 print("State: ", next_state.x)
 print("Error: ", next_state.P)
+print("Measurement: ", previous_state.z)
+print("Input: ", previous_state.u)
