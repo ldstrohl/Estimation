@@ -25,8 +25,11 @@ class KalmanFilter:
         P_pred = A @ P0 @ A.T + self.q
         meas_error = z - H @ x_pred
         S = H @ P_pred @ H.T+self.r
-        K = np.linalg.solve(S.T, (P_pred @ H.T).T).T
+        try:
+            K = np.linalg.solve(S.T, (P_pred @ H.T).T).T
+        except:
+            K = np.zeros_like(A)
         x = x_pred + K * meas_error
-        P = (np.identity(2) - K * H) * P_pred
+        P = (np.identity(2) - K @ H) @ P_pred
 
         return State(x, P)
