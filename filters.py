@@ -30,6 +30,6 @@ class KalmanFilter:
         except:
             K = np.zeros_like(A)
         x = x_pred + K * meas_error
-        P = (np.identity(2) - K @ H) @ P_pred
+        P = (np.identity(P0.shape[0]) - K @ H) @ P_pred
 
         return State(x, P)
